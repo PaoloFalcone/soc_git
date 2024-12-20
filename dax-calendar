@@ -1,0 +1,45 @@
+// Generazione Calendario a partire da una Data di una tabella Fact
+// Paolo Falcone, Softing Consulting, Nov 2024 - Rev 2
+
+let
+    // Estrai la colonna "Data" dalla tabella "Fact"
+    DateColumn = Tabella[NomeColonnaData],
+
+    // Trova la data minima e massima dalla colonna estratta
+    MinDate = List.Min(DateColumn),
+    MaxDate = List.Max(DateColumn),
+
+    // Genera la lista di date
+    Source = List.Dates(MinDate, Number.From(MaxDate - MinDate) + 1, #duration(1, 0, 0, 0)),
+
+    // Trasforma la lista in tabella
+    RenamedColumns = Table.FromList(Source, Splitter.SplitByNothing(), {"Date"}, null, ExtraValues.Error),
+
+    // Cambia il tipo di dato
+    ChangedType         = Table.TransformColumnTypes(RenamedColumns,{ {"Date", type date} } ),
+
+    // Aggiungi le colonne Calendario
+    vYear               = Table.AddColumn(ChangedType,          "Anno",                 each Date.Year([Date]), Int64.Type),
+    vMonth              = Table.AddColumn(vYear,                "Mese",                 each Date.Month([Date]), Int64.Type),
+    vDay                = Table.AddColumn(vMonth,               "Giorno",               each Date.Day([Date])),
+
+    vMonthYear          = Table.AddColumn(vDay,                 "MeseAnno",             each Text.PadStart(Text.From(Date.Month([Date])), 2, "0") & "-" & Text.From(Date.Year([Date])) ),
+    vMonthName          = Table.AddColumn(vMonthYear,           "MeseLettere",          each Text.Proper(Date.ToText([Date], "MMMM"))),  
+    vMonthNameShort     = Table.AddColumn(vMonthName,           "MeseBreve",            each Text.Proper(Text.Start(Date.ToText([Date], "MMMM"), 3))),
+
+    vDayOfWeek          = Table.AddColumn(vMonthNameShort,      "GiornoSettimana",      each Text.Proper(Date.DayOfWeekName([Date]))),
+    vDayOfWeekShort     = Table.AddColumn(vDayOfWeek,           "GiornoBreve",          each Text.Proper(Text.Start(Text.Proper(Date.DayOfWeekName([Date])), 3))),
+    vDayWeek            = Table.AddColumn(vDayOfWeekShort,      "GiornoInSettimana",    each Date.DayOfWeek([Date])+1),
+    vDayOfYear          = Table.AddColumn(vDayWeek,             "GiornoAnno",           each Date.DayOfYear([Date])),
+    
+    vWeek               = Table.AddColumn(vDayOfYear,           "Settimana",            each Date.WeekOfYear([Date]), Int64.Type),
+    vWeekInMonth        = Table.AddColumn(vWeek,                "SettimanaInMese",      each Date.WeekOfMonth([Date])),
+    vWeekEnding         = Table.AddColumn(vWeekInMonth,         "SettimanaFine",        each Date.EndOfWeek([Date]), type date),
+
+    vTrimestre          = Table.AddColumn(vWeekEnding,          "Trimestre",            each Date.QuarterOfYear([Date])),
+    vTrimestreBreve     = Table.AddColumn(vTrimestre,           "TrimestreBreve",       each Text.Combine({"T", Text.From(Date.QuarterOfYear([Date]))})),
+    vTrimestreAnno      = Table.AddColumn(vTrimestreBreve,      "TrimestreAnno",        each "T" & Number.ToText([Trimestre]) & "-" & Number.ToText([Anno])),
+
+    vDataISO            = Table.AddColumn(vTrimestreAnno,       "DataISO",              each [Anno] * 10000 + [Mese] * 100 + [Giorno])
+in
+    vDataISO
