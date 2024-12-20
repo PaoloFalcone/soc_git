@@ -1,13 +1,31 @@
-// CALENDARIO CALENDARAUTO CON COLONNE DI DETTAGLIO FORMATTATE
+// CALENDARIO AUTO CON COLONNE DI DETTAGLIO FORMATTATE (eliminare i doppioni) 
 
-Calendar = ADDCOLUMNS ( CALENDARAUTO (),
-"DateID", VALUE(FORMAT([Date], "YYYYMMDD")),
-"Year", YEAR([Date]), 
-"MonthNo", MONTH([Date]), 
-"Month", FORMAT([Date],"mmm"),
-"Month-short", LEFT( FORMAT( [Date], "mmm" ), 1) & REPT( UNICHAR ( 8203 ), MONTH( [Date] ) ),
-"QuarterNo", QUARTER([Date]),
-"Quarter", FORMAT([Date],"\QQ"),
-"YearMonth", FORMAT([Date],"YYYY-MM"), 
-"WeekdayNo", WEEKDAY([Date],2), //1-Sun..Sat, 2-Mon..Sat
-"Weekday", FORMAT([Date],"ddd") )
+DateTable =
+ADDCOLUMNS (
+  CALENDARAUTO(),
+    "Year", YEAR([Date]),
+    "Year-Month", FORMAT([Date],"YYYY-MM"), 
+    "Year-Quarter", FORMAT([Date], "YYYY \QTR-q"),
+    "Year-Quarter-short", YEAR([Date]) & QUARTER([Date]),
+
+    "Quarter", QUARTER([Date]),
+    "Quarter-No", QUARTER([Date]),
+    "Quarter-short", FORMAT([Date],"\QQ"),
+
+    "MonthNo", MONTH([Date]),
+    "Month", FORMAT([Date],"mmm"),
+    "Month-Name", FORMAT([Date], "MMMM"),
+    "Month-Number", MONTH([Date]),
+    "Month-short", LEFT( FORMAT( [Date], "mmm" ), 1) & REPT( UNICHAR ( 8203 ), MONTH( [Date] ) ),
+    "Month-Year", FORMAT([Date], "mmm YYYY"),
+    "Month-Year-short", FORMAT([Date], "YYYYMM"),
+
+    "Day", DAY([Date]),
+    "Weekday", WEEKDAY([Date]),
+    "Weekday-No", WEEKDAY([Date],2), //1-Sun..Sat, 2-Mon..Sat
+    "Weekday-short", FORMAT([Date],"ddd"),
+    "Weekday-Name", FORMAT([Date], "DDDD"),
+
+    "DateID", VALUE(FORMAT([Date], "YYYYMMDD")),
+    "DateKey", FORMAT([Date], "YYYYMMDD")
+)
