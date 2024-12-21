@@ -1,0 +1,116 @@
+# Power BI Calculated Measures
+
+## 1. Total Sales
+```DAX
+Total Sales = SUM('TableName'[salesAmount])
+```
+
+## 2. Total Cost
+```DAX
+Total Cost = SUM('TableName'[cost])
+```
+
+## 3. Profit
+```DAX
+Profit = [Total Sales] - [Total Cost]
+```
+
+## 4. Profit Margin
+```DAX
+Profit Margin = DIVIDE([Profit], [Total Sales])
+```
+
+## 5. Transactions
+```DAX
+Transactions = COUNTROWS('TableName')
+```
+
+## 6. Related Table Count
+```DAX
+Related Table Count = COUNTROWS(RELATEDTABLE('TableName'))
+```
+
+## 7. MTD Sales (Direct Query)
+```DAX
+MTD Sales = TOTALMTD([Total Sales], 'DateTable'[DateColumn])
+```
+
+## 8. MTD Sales (Custom)
+```DAX
+MTD Sales = CALCULATE([Total Sales],
+                      ALL('DateTable'),
+                      'DateTable'[DateYear] = MAX('DateTable'[DateYear]),
+                      'DateTable'[DateMonth] = MAX('DateTable'[DateMonth]),
+                      'DateTable'[Date] <= MAX('DateTable'[Date]))
+```
+
+## 9. YTD Sales (Direct Query)
+```DAX
+YTD Sales = TOTALYTD([Total Sales], 'DateTable'[DateColumn])
+```
+
+## 10. YTD Sales (Fiscal Calendar)
+```DAX
+YTD Sales = TOTALYTD([Total Sales], 'DateTable'[DateColumn], "05/31")
+```
+
+## 11. YTD Sales (Custom)
+```DAX
+YTD Sales = CALCULATE([Total Sales],
+                      ALL('DateTable'),
+                      'DateTable'[DateYear] = MAX('DateTable'[DateYear]),
+                      'DateTable'[Date] <= MAX('DateTable'[Date]))
+```
+
+## 12. Prior Year Profit
+```DAX
+Prior Year Profit = CALCULATE([Profit], SAMEPERIODLASTYEAR('DateTable'[DateColumn]))
+```
+
+## 13. Prior Year Profit (Custom)
+```DAX
+Prior Year Profit = CALCULATE([Profit],
+                              FILTER(ALL('DateTable'),
+                                     'DateTable'[Year] = MAX('DateTable'[Year]) - 1))
+```
+
+## 14. YOY Profit
+```DAX
+YOY Profit = [Profit] - [Prior Year Profit]
+```
+
+## 15. Last YTD Sales
+```DAX
+Last YTD Sales = CALCULATE([YTD Sales], SAMEPERIODLASTYEAR('DateTable'[DateColumn]))
+```
+
+## 16. Total Sales All Countries
+```DAX
+Total Sales All Countries = CALCULATE([Total Sales], ALL('GeographyTable'[Country]))
+```
+
+## 17. Percent of Total
+```DAX
+Percent of Total = DIVIDE([Total Sales], [Total Sales All Countries])
+```
+
+## 18. Rolling 12 Months Profit
+```DAX
+Rolling 12 Months Profit = CALCULATE([Profit],
+                                     DATESBETWEEN('DateTable'[DateColumn],
+                                                  NEXTDAY(SAMEPERIODLASTYEAR(LASTDATE('DateTable'[DateColumn]))),
+                                                  LASTDATE('DateTable'[DateColumn])))
+```
+
+## 19. 7 Day Moving Average
+```DAX
+7 Day Moving Average = AVERAGEX(FILTER(ALL('DateTable'),
+                                       'DateTable'[FullDateAlternateKey] > MAX('DateTable'[FullDateAlternateKey]) - 7 &&
+                                       'DateTable'[FullDateAlternateKey] <= MAX('DateTable'[FullDateAlternateKey])),
+                                [Profit])
+```
+
+## 20. Country Rank
+```DAX
+Country Rank = RANKX(ALL('GeographyTable'[Country]), [Total Sales], , SKIP)
+```
