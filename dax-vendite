@@ -1,32 +1,126 @@
-+-----+---------------------------+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| #   | Nome Misura               | Traduzione Nome Misura            | Espressione DAX                                                                                                              | Descrizione                                                                                                                              |
-+-----+---------------------------+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+
-| 1   | Total Sales               | Vendite Totali                    | Total Sales = SUM('SalesTable'[salesAmount])                                                                                 | Calcola il totale delle vendite sommando i valori della colonna salesAmount.                                                             |
-| 2   | Total Cost                | Costi Totali                      | Total Cost = SUM('SalesTable'[cost])                                                                                         | Calcola il costo totale sommando i valori della colonna cost.                                                                            |
-| 3   | Profit                    | Profitto                          | Profit = [Total Sales] - [Total Cost]                                                                                        | Calcola il profitto sottraendo i costi totali dalle vendite totali.                                                                      |
-| 4   | Profit Margin             | Margine di Profitto               | Profit Margin = DIVIDE([Profit], [Total Sales])                                                                              | Calcola il margine di profitto dividendo il profitto per le vendite totali.                                                              |
-| 5   | Transactions              | Transazioni                       | Transactions = COUNTROWS('SalesTable')                                                                                       | Conta il numero di transazioni come il totale delle righe nella tabella specificata.                                                     |
-| 6   | Related Table Count       | Conteggio Tabelle Correlate       | Related Table Count = COUNTROWS(RELATEDTABLE('SalesTable'))                                                                  | Conta il numero di righe in una tabella correlata.                                                                                       |
-| 7   | MTD Sales (Direct Query)  | Vendite MTD (Query Diretta)       | MTD Sales = TOTALMTD([Total Sales], 'CalendarTable'[Date])                                                                   | Calcola le vendite cumulative per il mese corrente fino alla data selezionata.                                                           |
-| 8   | MTD Sales (Custom)        | Vendite MTD (Personalizzate)      | MTD Sales = CALCULATE([Total Sales], ALL('CalendarTable'), 'CalendarTable'[DateYear] = MAX('CalendarTable'[DateYear]), ...   | Calcola le vendite cumulative per il mese corrente con una logica personalizzata.                                                        |
-| 9   | YTD Sales (Direct Query)  | Vendite YTD (Query Diretta)       | YTD Sales = TOTALYTD([Total Sales], 'CalendarTable'[Date])                                                            .      | Calcola le vendite cumulative per l'anno corrente fino alla data selezionata.                                                            |
-| 10  | YTD Sales (Fiscal Calendar)| Vendite YTD (Anno Fiscale)       | YTD Sales = TOTALYTD([Total Sales], 'CalendarTable'[Date],'05/31')                                                           | Calcola le vendite cumulative per l'anno fiscale, specificando la data di fine anno fiscale.                                             |
-| 11  | YTD Sales (Custom)        | Vendite YTD (Personalizzate)      | YTD Sales = CALCULATE([Total Sales], ALL('CalendarTable'), 'CalendarTable'[DateYear] = MAX('CalendarTable'[DateYear]), ...   | Calcola le vendite cumulative per l'anno corrente con una logica personalizzata.                                                         |
-| 12  | Prior Year Profit         | Profitto Anno Precedente          | Prior Year Profit = CALCULATE([Profit], SAMEPERIODLASTYEAR('CalendarTable'[Date]))                                           | Calcola il profitto dell'anno precedente per lo stesso periodo di tempo.                                                                 |
-| 13  | Prior Year Profit (Custom)| Profitto Anno Precedente (Custom) | Prior Year Profit = CALCULATE([Profit], FILTER(ALL('CalendarTable'), 'CalendarTable'[Year] = MAX('CalendarTable'[Year]) - 1))| Calcola il profitto dell'anno precedente con una logica personalizzata.                                                                  |
-| 14  | YOY Profit                | Variazione Profitto Anno su Anno  | YOY Profit = [Profit] - [Prior Year Profit]                                                                                  | Calcola la variazione anno su anno (YOY) del profitto sottraendo il profitto dell'anno precedente.                                       |
-| 15  | Last YTD Sales            | Vendite YTD Anno Precedente       | Last YTD Sales = CALCULATE([YTD Sales], SAMEPERIODLASTYEAR('CalendarTable'[Date]))                                           | Calcola le vendite cumulative dell'anno precedente fino alla data selezionata.                                                           |
-| 16  | Total Sales All Countries | Vendite Totali per Tutti i Paesi  | Total Sales All Countries = CALCULATE([Total Sales], ALL('GeographyTable'[Country]))                                         | Calcola le vendite totali ignorando eventuali filtri sui paesi.                                                                          |
-| 17  | Percent of Total          | Percentuale sul Totale            | Percent of Total = DIVIDE([Total Sales], [Total Sales All Countries])                                                        | Calcola la percentuale delle vendite di un'entità rispetto al totale di tutti i paesi.                                                   |
-| 18  | 12 Months Sales Rolling   | Profitto Rolling su 12 Mesi       | 12 Months Sales Rolling = CALCULATE([Total Sales], 
-                                                                                                  DATESBETWEEN('CalendarTable'[Date],
-                                                                                                  NEXTDAY(SAMEPERIODLASTYEAR(
-                                                                                                  LASTDATE( CalendarTable[Date]))),
-                                                                                                  LASTDATE( CalendarTable[Date])))                                                                   | Calcola il profitto degli ultimi 12 mesi in modo dinamico rispetto alla data selezionata.                                                |
-| 19  | 7 Day Moving Average      | Media Mobile 7 Giorni             | 7 Day Moving Average =    AVERAGEX(
-                                                                                                  FILTER(ALL('CalendarTable'), 
-                                                                                                  'CalendarTable'[Date] > ( MAX('CalendarTable'[Date]) - 7 ) &&
-                                                                                                  'CalendarTable'[Date] <=  MAX('CalendarTable'[Date] )) ,
-                                                                                                   [Profit])                                                                                         | Calcola la media mobile del profitto su 7 giorni.                                                                                        |
-| 20  | Country Rank              | Classifica Paesi                  | Country Rank = RANKX(ALL('GeographyTable'[Country]), [Total Sales],,, SKIP)                                                  | Calcola la posizione di ciascun paese in base alle vendite totali, ignorando i filtri sul paese.                                         |
-+-----+---------------------------+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+
+1. Total Sales
+Traduzione Nome Misura: Vendite Totali
+Espressione DAX:
+Total Sales = SUM('SalesTable'[salesAmount])
+Descrizione: Calcola il totale delle vendite sommando i valori della colonna salesAmount.
+
+2. Total Cost
+Traduzione Nome Misura: Costi Totali
+Espressione DAX:
+Total Cost = SUM('SalesTable'[cost])
+Descrizione: Calcola il costo totale sommando i valori della colonna cost.
+
+3. Profit
+Traduzione Nome Misura: Profitto
+Espressione DAX:
+Profit = [Total Sales] - [Total Cost]
+Descrizione: Calcola il profitto sottraendo i costi totali dalle vendite totali.
+
+4. Profit Margin
+Traduzione Nome Misura: Margine di Profitto
+Espressione DAX:
+Profit Margin = DIVIDE([Profit], [Total Sales])
+Descrizione: Calcola il margine di profitto dividendo il profitto per le vendite totali.
+
+5. Transactions
+Traduzione Nome Misura: Transazioni
+Espressione DAX:
+Transactions = COUNTROWS('SalesTable')
+Descrizione: Conta il numero di transazioni come il totale delle righe nella tabella specificata.
+
+6. Related Table Count
+Traduzione Nome Misura: Conteggio Tabelle Correlate
+Espressione DAX:
+Related Table Count = COUNTROWS(RELATEDTABLE('SalesTable'))
+Descrizione: Conta il numero di righe in una tabella correlata.
+
+7. MTD Sales (Direct Query)
+Traduzione Nome Misura: Vendite MTD (Query Diretta)
+Espressione DAX:
+MTD Sales = TOTALMTD([Total Sales], 'CalendarTable'[Date])
+Descrizione: Calcola le vendite cumulative per il mese corrente fino alla data selezionata.
+
+8. MTD Sales (Custom)
+Traduzione Nome Misura: Vendite MTD (Personalizzate)
+Espressione DAX:
+MTD Sales = CALCULATE([Total Sales], ALL('CalendarTable'), 'CalendarTable'[DateYear] = MAX('CalendarTable'[DateYear]), ...)
+Descrizione: Calcola le vendite cumulative per il mese corrente con una logica personalizzata.
+
+9. YTD Sales (Direct Query)
+Traduzione Nome Misura: Vendite YTD (Query Diretta)
+Espressione DAX:
+YTD Sales = TOTALYTD([Total Sales], 'CalendarTable'[Date])
+Descrizione: Calcola le vendite cumulative per l'anno corrente fino alla data selezionata.
+
+10. YTD Sales (Fiscal Calendar)
+Traduzione Nome Misura: Vendite YTD (Anno Fiscale)
+Espressione DAX:
+YTD Sales = TOTALYTD([Total Sales], 'CalendarTable'[Date], "05/31")
+Descrizione: Calcola le vendite cumulative per l'anno fiscale, specificando la data di fine anno fiscale.
+
+11. YTD Sales (Custom)
+Traduzione Nome Misura: Vendite YTD (Personalizzate)
+Espressione DAX:
+YTD Sales = CALCULATE([Total Sales], ALL('CalendarTable'), 'CalendarTable'[DateYear] = MAX('CalendarTable'[DateYear]), ...)
+Descrizione: Calcola le vendite cumulative per l'anno corrente con una logica personalizzata.
+
+12. Prior Year Profit
+Traduzione Nome Misura: Profitto Anno Precedente
+Espressione DAX:
+Prior Year Profit = CALCULATE([Profit], SAMEPERIODLASTYEAR('CalendarTable'[Date]))
+Descrizione: Calcola il profitto dell'anno precedente per lo stesso periodo di tempo.
+
+13. Prior Year Profit (Custom)
+Traduzione Nome Misura: Profitto Anno Precedente (Custom)
+Espressione DAX:
+Prior Year Profit = CALCULATE([Profit], FILTER(ALL('CalendarTable'), 'CalendarTable'[Year] = MAX('CalendarTable'[Year]) - 1))
+Descrizione: Calcola il profitto dell'anno precedente con una logica personalizzata.
+
+14. YOY Profit
+Traduzione Nome Misura: Variazione Profitto Anno su Anno
+Espressione DAX:
+YOY Profit = [Profit] - [Prior Year Profit]
+Descrizione: Calcola la variazione anno su anno (YOY) del profitto sottraendo il profitto dell'anno precedente.
+
+15. Last YTD Sales
+Traduzione Nome Misura: Vendite YTD Anno Precedente
+Espressione DAX:
+Last YTD Sales = CALCULATE([YTD Sales], SAMEPERIODLASTYEAR('CalendarTable'[Date]))
+Descrizione: Calcola le vendite cumulative dell'anno precedente fino alla data selezionata.
+
+16. Total Sales All Countries
+Traduzione Nome Misura: Vendite Totali per Tutti i Paesi
+Espressione DAX:
+Total Sales All Countries = CALCULATE([Total Sales], ALL('GeographyTable'[Country]))
+Descrizione: Calcola le vendite totali ignorando eventuali filtri sui paesi.
+
+17. Percent of Total
+Traduzione Nome Misura: Percentuale sul Totale
+Espressione DAX:
+Percent of Total = DIVIDE([Total Sales], [Total Sales All Countries])
+Descrizione: Calcola la percentuale delle vendite di un'entità rispetto al totale di tutti i paesi.
+
+18. 12 Months Sales Rolling
+Traduzione Nome Misura: Vendite Rolling su 12 Mesi
+Espressione DAX:
+
+DAX
+Copia codice
+12 Months Sales Rolling = CALCULATE([Total Sales], 
+DATESBETWEEN('CalendarTable'[Date], NEXTDAY(SAMEPERIODLASTYEAR(LASTDATE('CalendarTable'[Date]))), LASTDATE('CalendarTable'[Date])))
+Descrizione: Calcola il profitto degli ultimi 12 mesi in modo dinamico rispetto alla data selezionata.
+
+19. 7 Day Moving Average
+Traduzione Nome Misura: Media Mobile 7 Giorni
+Espressione DAX:
+
+DAX
+Copia codice
+7 Day Moving Average = AVERAGEX(FILTER(ALL('CalendarTable'), 'CalendarTable'[Date] > (MAX('CalendarTable'[Date]) - 7) && 'CalendarTable'[Date] <= MAX('CalendarTable'[Date])), [Profit])
+Descrizione: Calcola la media mobile del profitto su 7 giorni.
+
+20. Country Rank
+Traduzione Nome Misura: Classifica Paesi
+Espressione DAX:
+Country Rank = RANKX(ALL('GeographyTable'[Country]), [Total Sales],, SKIP)
+Descrizione: Calcola la posizione di ciascun paese in base alle vendite totali, ignorando i filtri sul paese.
