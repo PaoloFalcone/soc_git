@@ -124,3 +124,32 @@ Traduzione Nome Misura: Classifica Paesi
 Espressione DAX:
 Country Rank = RANKX(ALL('GeographyTable'[Country]), [Total Sales],, SKIP)
 Descrizione: Calcola la posizione di ciascun paese in base alle vendite totali, ignorando i filtri sul paese.
+
+21. Filtro su una singola colonna (Condizione "AND")
+Descrizione: calcolare le vendite totali quando i prezzi variano da 100 a 1000 dollari 
+Dax: Total Sales 100-1000 = CALCULATE([Total Sales], Sales[Price] >= 100, Sales[Price] <= 1000)
+
+
+22. Filtro su una singola colonna (Condizione "OR")
+Descrizione: calcolare le vendite totali quando per i prodotti con il colore rosso o blu
+Dax: Total Sales Red or Blu = CALCULATE([Total Sales], Product[Color] = "Red" || Product[Color] = "Blue")
+
+23. Filtro su più colonne
+Descrizione: calcolare le vendite totali in cui la quantità × il prezzo è ≥ 1.000 dollari
+Dax: Total Sales > 1000 = CALCULATE(
+ [Total Sales], 
+ FILTER(ALL(Sales[Quantity], Sales[Price]), 
+ Sales[Quantity] * Sales[Price] >= 1000)
+)
+
+24. Filtro su più colonne con selezione effettuata con slicers
+Descrizione: calcolare le vendite totali in cui prezzo è tra 500 e 3.000 dollari (Il filtro sul prezzo è dinamico a video)
+Dax: Total Sales > 500 e < 3000 = CALCULATE(
+ [Total Sales], 
+ KEEPFILTERS(
+ FILTER(ALL(Sales[Quantity], Sales[Price]), 
+ Sales[Quantity] * Sales[Price] >= 1000)
+ )
+)
+
+
