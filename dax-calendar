@@ -1,4 +1,5 @@
 // Generazione Calendario a partire da una Data di una tabella Fact
+// Codice M, tabella persistente nel modello dati
 // Paolo Falcone, Softing Consulting, Nov 2024 - Rev 2
 
 let
