@@ -157,4 +157,9 @@ Dax: Total Sales > 500 e < 3000 = CALCULATE(
  )
 )
 
+25. Calcolo Vendite Ultimi 7 giorni
+Descrizione: calcolare le vendite degli ultimi 7 giorni (rolling)
+Dax: Last 7 days Sales = CALCULATE ( [Total Revenue], DATEADD(Calendar_Date[Date], -7, Day) )
+/*Alternativa*/
+Last 7 days Sales = CALCULATE ( [Total Revenue], DATESINPERIOD(dim_date[date],  MAX(dim_date èdate]), -7, Day) ) 
 
