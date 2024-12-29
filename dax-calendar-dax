@@ -1,4 +1,6 @@
-// CALENDARIO AUTO CON COLONNE DI DETTAGLIO FORMATTATE (eliminare i doppioni) 
+// Generazione Calendario automatico
+// Codice DAX, tabella non persistente nel modello dati
+// Paolo Falcone, Softing Consulting, Nov 2024 - Rev 2
 
 DateTable =
 ADDCOLUMNS (
