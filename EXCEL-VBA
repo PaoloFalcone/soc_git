@@ -1,0 +1,5 @@
+'  *** Evidenzia la riga corrente in giallo ***
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+Cells.Interior.Pattern = xlNone
+ActiveCell.EntireRow.Rows.Interior.ColorIndex = 6
+End Sub
