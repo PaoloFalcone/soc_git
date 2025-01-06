@@ -163,3 +163,21 @@ Dax: Last 7 days Sales = CALCULATE ( [Total Revenue], DATEADD(Calendar_Date[Date
 /*Alternativa*/
 Last 7 days Sales = CALCULATE ( [Total Revenue], DATESINPERIOD(dim_date[date],  MAX(dim_date èdate]), -7, Day) ) 
 
+
+26. Calcola le vendite dell'anno corrente
+Sales AC = CALCULATE([Sales], ALL('DateTable'), 'DateTable'[Year] = MAX('DateTable'[Year]))
+
+27. Calcola le vendite dell'anno precedente
+Sales AP = CALCULATE([Sales], SAMEPERIODLASTYEAR('DateTable'[Date]))
+
+28. Calcolo del tasso di crescita
+Descrizione: Come visualizzare l'evoluzione tra l'anno N e l'anno N-1 per individuare la progressione (o regressione) delle vendite
+Utilizzo: andare su etichette dati e sostituire il valore predefinito dell'etichetta con questa metrica
+Growth vs PM = 
+VAR growth = DIVIDE ( [Sales], [Sales AP] ) -1
+RETURN
+    SWITCH (
+        TRUE (),
+        growth <=0, FORMAT (growth, "0%▼"),
+        growth > 0, FORMAT( growth, "+0%▲"))
+
