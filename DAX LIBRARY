@@ -181,3 +181,17 @@ RETURN
         growth <=0, FORMAT (growth, "0%▼"),
         growth > 0, FORMAT( growth, "+0%▲"))
 
+29. Calcolo Vendite dell'anno fino alla data odierna
+Sales YTD Today = 
+VAR _y = MAX('Calendar'[Year])
+VAR _m = MONTH(TODAY())
+VAR _d = DAY(TODAY())
+VAR _refDate = DATE(_y, _m, _d)
+VAR _result = 
+    TOTALYTD(    
+        [Sales],
+        'Calendar'[Date],    
+        'Calendar'[Date] <= _refDate
+    )
+RETURN _result
+
