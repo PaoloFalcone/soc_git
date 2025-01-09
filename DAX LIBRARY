@@ -195,3 +195,13 @@ VAR _result =
     )
 RETURN _result
 
+---------------------------------------------------------------------------------------------------------------------------------------------------
+30. Fatturato = SUMX(Vendite,Vendite[Imponibile])
+31. Fatturato 2023 = CALCULATE([Fatturato],FILTER(Calendario,Calendario[Anno] = 2023))
+32. Fatturato RT = CALCULATE([Fatturato], FILTER(ALLSELECTED(Calendario),Calendario[Date] <= MAX(Calendario[Date])))
+33. Fatturato RT YTD = CALCULATE([Fatturato],DATESYTD(Calendario[Date]))
+34. Fatturato RT MTD = CALCULATE([Fatturato],DATESMTD(Calendario[Date]))
+35. Fatturato RT SPLY = CALCULATE([Fatturato],SAMEPERIODLASTYEAR(Calendario[Date]))
+36. Fatturato RT -1 = CALCULATE([Fatturato],DATEADD(Calendario[Date],-1,MONTH))
+37. Fatturato PP-M = CALCULATE([Fatturato],PARALLELPERIOD(Calendario[Date],-1,MONTH))
+38. 
