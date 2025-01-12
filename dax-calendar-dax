@@ -31,3 +31,27 @@ ADDCOLUMNS (
     "DateID", VALUE(FORMAT([Date], "YYYYMMDD")),
     "DateKey", FORMAT([Date], "YYYYMMDD")
 )
+
+************************************************************************************
+
+CalendarTable = 
+var __max_date = MAX(Vendite[DataVendita])
+var __min_date = MIN(Vendite[DataVendita])
+var __calendar_date = CALENDAR(__min_date,__max_date)
+var __calendar = 
+ADDCOLUMNS( 
+__calendar_date,
+"Year", YEAR([Date]),
+"Month", MONTH([Date]),
+"MonthName", FORMAT([Date], "MMM"),
+"Week", WEEKNUM([Date],2), // week begins on Monday 
+"DayInMonth", DAY([Date]),
+"WeekDay", WEEKDAY([Date], 2), // Monday 1 Sunday 7
+"Weekend_flag", IF(WEEKDAY([Date], 2) >5, 1,0),
+"WeekDay_DDD", FORMAT([Date], "DDD")
+)
+return
+__calendar
+
+************************************************************************************
+
