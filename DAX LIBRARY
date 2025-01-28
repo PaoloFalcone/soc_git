@@ -205,3 +205,13 @@ RETURN _result
 36. Fatturato RT -1 = CALCULATE([Fatturato],DATEADD(Calendario[Date],-1,MONTH))
 37. Fatturato PP-M = CALCULATE([Fatturato],PARALLELPERIOD(Calendario[Date],-1,MONTH))
 38. 
+39.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+40. Rimuovere il valore YTD per le date future in Power BI
+1) Nuova colonna nella tabella delle date che confronta la data per gli ultimi dati nella tabella dei fatti con la colonna delle date nella tabella delle date. Adattare l'espressione di misura YTD per filtrare sulla colonna di controllo aggiunta.
+2) Con l'espressione di misura YTD standard, il valore YTD continua per tutti i periodi. Con l'espressione YTD filtrata adattata, il valore YTD per i periodi futuri viene rimosso dalla visualizzazione.
+
+Sales Date Check = Dates[Date] <= EOMONTH ( MAX ('Sales Fact [Order Date] ) , 0 )
+Sales YTD = CALCULATE ( TOTALYTD ( [Sales], Dates[Date], Dates[Sales Date Check] )
+---------------------------------------------------------------------------------------------------------------------------------------------------
