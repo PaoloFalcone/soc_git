@@ -215,3 +215,7 @@ RETURN _result
 Sales Date Check = Dates[Date] <= EOMONTH ( MAX ('Sales Fact [Order Date] ) , 0 )
 Sales YTD = CALCULATE ( TOTALYTD ( [Sales], Dates[Date], Dates[Sales Date Check] )
 ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+41. Visualizza Valore e Percentuae su grafici
+Valore_% = DIVIDE([Fatturato],CALCULATE([Fatturato],REMOVEFILTERS(Calendario[Anno])))
+
