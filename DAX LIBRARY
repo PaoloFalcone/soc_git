@@ -219,3 +219,14 @@ Sales YTD = CALCULATE ( TOTALYTD ( [Sales], Dates[Date], Dates[Sales Date Check]
 41. Visualizza Valore e Percentuae su grafici
 Valore_% = DIVIDE([Fatturato],CALCULATE([Fatturato],REMOVEFILTERS(Calendario[Anno])))
 
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+42. Crea tabella con anni Actual / Forecast 
+dim_years = ADDCOLUMNS
+            ( 
+               GENERATESERIES( 
+                MIN(Calendario[Anno]), MAX(Calendario[Anno])+10 , 1),
+               "Type", if( [Value] <= MAX(Calendario[Anno]), "Actual", "Forecasted")
+            )
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
