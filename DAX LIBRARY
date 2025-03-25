@@ -230,3 +230,22 @@ dim_years = ADDCOLUMNS
             )
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Spedito % VS AP =
+VAR Diviso =
+DIVIDE(
+    ([Spedito_€]- [Spedito_€ AP]),
+    [Spedito_€ AP]
+)
+VAR DivisoSuper =
+IF([Spedito €] > 0 && [Spedito_€ AP] = 0,
+"MA VIENI", diviso
+)
+VAR Risultato =
+SWITCH(Diviso>0,
+TRUE(), "😀 " & FORMAT(diviso, "0%") ,
+DivisoSuper
+)
+RETURN Risultato
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
