@@ -249,3 +249,12 @@ DivisoSuper
 RETURN Risultato
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
+CONSOLIDA 3 LISTE IN UNA SOLA TABELLA
+GO TO MODELING TAB > CREATE NEW TABLE > WRITE BELOW DAX
+Unique List =
+ DISTINCT(
+  UNION (
+   SELECTCOLUMNS (Sheetl, "Players", Sheetl[lndia]), 
+   SELECTCOLUMNS (Sheetl, "Players", Sheetl[Australia]), 
+   SELECTCOLUMNS (Sheetl, "Players", Sheetl[Europa])
+))
