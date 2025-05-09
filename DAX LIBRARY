@@ -109,8 +109,6 @@ Descrizione: Calcola la percentuale delle vendite di un'entità rispetto al tota
 Traduzione Nome Misura: Vendite Rolling su 12 Mesi
 Espressione DAX:
 
-DAX
-Copia codice
 12 Months Sales Rolling = CALCULATE([Total Sales], 
 DATESBETWEEN('CalendarTable'[Date], NEXTDAY(SAMEPERIODLASTYEAR(LASTDATE('CalendarTable'[Date]))), LASTDATE('CalendarTable'[Date])))
 Descrizione: Calcola il profitto degli ultimi 12 mesi in modo dinamico rispetto alla data selezionata.
@@ -119,8 +117,6 @@ Descrizione: Calcola il profitto degli ultimi 12 mesi in modo dinamico rispetto 
 Traduzione Nome Misura: Media Mobile 7 Giorni
 Espressione DAX:
 
-DAX
-Copia codice
 7 Day Moving Average = AVERAGEX(FILTER(ALL('CalendarTable'), 'CalendarTable'[Date] > (MAX('CalendarTable'[Date]) - 7) && 'CalendarTable'[Date] <= MAX('CalendarTable'[Date])), [Profit])
 Descrizione: Calcola la media mobile del profitto su 7 giorni.
 
